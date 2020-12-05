@@ -241,7 +241,6 @@ fn passport_has_valid_contents(passport: &str) -> bool {
 
         if key == &"ecl" {
             if !EYE_COLOR.contains(value) {
-                println!("{}", value);
                 return false;
             }
         }
@@ -267,10 +266,7 @@ fn get_height(line: &str) -> Option<Height> {
     let value = results.get(1)?.as_str().parse::<i32>().ok()?;
     let unit = results.get(2)?.as_str().parse().ok()?;
 
-    Some(Height {
-        value,
-        unit
-    })
+    Some(Height { value, unit })
 }
 
 impl Height {
