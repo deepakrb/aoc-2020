@@ -10,10 +10,10 @@ fn main() {
 }
 
 fn parse_input(input: &str) -> Vec<&str> {
-    return input.lines()
+    input.lines()
         .map(|l| l.trim())
         .filter(|l| !l.is_empty())
-        .collect();
+        .collect()
 }
 
 /*
@@ -60,7 +60,7 @@ Here are some other boarding passes:
 As a sanity check, look through your list of boarding passes. What is the highest seat ID on a boarding pass?
  */
 fn part1(inputs: Vec<&str>) -> i32 {
-    return get_ids(inputs).iter().max().unwrap().clone();
+    get_ids(inputs).iter().max().unwrap().clone()
 }
 
 /*
@@ -97,12 +97,15 @@ fn get_row_value(operation: String) -> (i32, i32) {
 
     operation.chars().for_each(|c| {
         let new_row = ((row_limit - row_floor) / 2) + row_floor;
-        if c == 'F' { row_limit =  new_row; return; }
-        if c == 'B' { row_floor = new_row; return; }
-
         let new_column = ((column_limit - column_floor) / 2) + column_floor;
-        if c == 'L' { column_limit = new_column; return; }
-        if c == 'R' { column_floor = new_column; return; }
+
+        match c {
+            'F' => { row_limit = new_row },
+            'B' => { row_floor = new_row },
+            'L' => { column_limit = new_column },
+            'R' => { column_floor = new_column },
+            _ => { panic!("unknown char")}
+        }
     });
 
     (row_floor, column_floor)
@@ -120,7 +123,7 @@ mod tests {
     }
 
     #[test]
-    fn test_part_1() {
+    fn test_part_1_example() {
         let input = "BFFFBBFRRR
         FFFBBBFRRR
         BBFFBBFRLL";
