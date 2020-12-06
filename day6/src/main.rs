@@ -55,14 +55,14 @@ In this example, the sum of these counts is 3 + 3 + 3 + 1 + 1 = 11.
 For each group, count the number of questions to which anyone answered "yes". What is the sum of those counts?
  */
 fn part1(groups: Vec<&str>) -> i32 {
-    return groups.iter().map(|group| {
+    groups.iter().map(|group| {
         group.lines()
             .fold(HashSet::new(), |mut acc, x| {
                 x.chars().for_each(|c| { acc.insert(c); return; });
                 acc
             })
     }).map(|hs| hs.len() as i32)
-    .fold(0, |acc, x| acc + x);
+    .fold(0, |acc, x| acc + x)
 }
 
 /*
@@ -103,7 +103,7 @@ In this example, the sum of these counts is 3 + 0 + 1 + 1 + 1 = 6.
 For each group, count the number of questions to which everyone answered "yes". What is the sum of those counts?
  */
 fn part2(groups: Vec<&str>) -> i32 {
-    return groups.iter().map(|group| {
+    groups.iter().map(|group| {
         let mut lines = group.lines()
             .map(|x| HashSet::from_iter(x.chars().into_iter()));
 
@@ -112,7 +112,7 @@ fn part2(groups: Vec<&str>) -> i32 {
             .map(|set: HashSet<char>| lines.fold(set, |set1, set2| HashSet::from_iter(set1.intersection(&set2).map(|c| c.to_owned()))))
             .unwrap()
     }).map(|hs| hs.len() as i32)
-        .fold(0, |acc, x| acc + x);
+        .fold(0, |acc, x| acc + x)
 }
 
 fn parse_input(data: &str) -> Vec<&str> {
