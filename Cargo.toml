@@ -1,5 +1,5 @@
 [package]
-name = "day4"
+name = "aoc-2020"
 version = "0.1.0"
 authors = ["Deepak <db@bhla.co>"]
 edition = "2018"

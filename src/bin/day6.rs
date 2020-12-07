@@ -3,7 +3,7 @@ use std::fs;
 use std::iter::FromIterator;
 
 fn main() {
-    let data = fs::read_to_string("input.txt").expect("Unable to read file");
+    let data = fs::read_to_string("inputs/day6.txt").expect("Unable to read file");
 
     println!("Part 1: {}", part1(parse_input(&data)));
     println!("Part 2: {}", part2(parse_input(&data)));
@@ -124,7 +124,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_part_1() {
+    fn test_part_1_example() {
         let input = "abc
 
 a
@@ -145,7 +145,7 @@ b";
     }
 
     #[test]
-    fn test_part_2() {
+    fn test_part_2_example() {
         let input = "abc
 
 a

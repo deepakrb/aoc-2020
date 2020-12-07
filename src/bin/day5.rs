@@ -3,7 +3,7 @@ use std::collections::HashSet;
 use std::iter::FromIterator;
 
 fn main() {
-    let data = fs::read_to_string("input.txt").expect("Unable to read file");
+    let data = fs::read_to_string("inputs/day5.txt").expect("Unable to read file");
 
     println!("Part 1: {}", part1(parse_input(&data)));
     println!("Part 2: {}", part2(parse_input(&data)));

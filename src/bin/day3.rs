@@ -1,10 +1,8 @@
 use std::fs;
 
 fn main() {
-    let data = fs::read_to_string("./input.txt").expect("Unable to read file");
-
-    let parsed_input = parse(&data);
-    let sf = SlopeFinder{data: parsed_input};
+    let data = fs::read_to_string("inputs/day3.txt").expect("Unable to read file");
+    let sf = SlopeFinder{data: parse(&data)};
     part_1(&sf);
     part_2(&sf);
 }
@@ -28,11 +26,11 @@ impl SlopeFinder {
         let mut trees_hit = 0;
 
         loop {
-            if &self.data[current_row][current_column] == '#' {
+            if &self.data[current_row][current_column] == &'#' {
                 trees_hit += 1;
             }
 
-            current_column = (current_column + depth as usize) % row.len();
+            current_column = (current_column + depth as usize) % &self.data[current_row].len();
             current_row += length as usize;
 
             if current_row > self.data.len() - 1 {
@@ -102,7 +100,7 @@ In this example, traversing the map using this slope would cause you to encounte
 Starting at the top-left corner of your map and following a slope of right 3 and down 1, how many trees would you encounter?
 */
 fn part_1(sf: &SlopeFinder) {
-    println!("Trees Hit: {}", sf.find_trees_hit(1, 3));
+    println!("Part 1: {}", sf.find_trees_hit(1, 3));
 }
 
 /*
@@ -128,5 +126,5 @@ fn part_2(sf: &SlopeFinder) {
         .map(|input| sf.find_trees_hit(input.0, input.1))
         .fold(1, |acc, x| x * acc);
 
-    println!("Tress Hit Multiplier: {:?}", trees_hit);
+    println!("Part 2: {:?}", trees_hit);
 }

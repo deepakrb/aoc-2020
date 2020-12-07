@@ -4,7 +4,7 @@ use std::collections::hash_map::Entry;
 use std::iter::FromIterator;
 
 fn main() {
-    let data = fs::read_to_string("input.txt").expect("Unable to read file");
+    let data = fs::read_to_string("inputs/day7.txt").expect("Unable to read file");
 
     println!("Part 1: {}", part1(parse_input(data.clone())));
     println!("Part 2: {}", part2(parse_input(data.clone())));
@@ -141,7 +141,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_part_1_examples() {
+    fn test_part_1_example() {
         let input = "light red bags contain 1 bright white bag, 2 muted yellow bags.
 dark orange bags contain 3 bright white bags, 4 muted yellow bags.
 bright white bags contain 1 shiny gold bag.
@@ -156,7 +156,7 @@ dotted black bags contain no other bags.";
     }
 
     #[test]
-    fn test_part_2_examples() {
+    fn test_part_2_example() {
         let input = "shiny gold bags contain 2 dark red bags.
 dark red bags contain 2 dark orange bags.
 dark orange bags contain 2 dark yellow bags.

@@ -13,7 +13,7 @@ lazy_static! {
 }
 
 fn main() {
-    let data = fs::read_to_string("input.txt").expect("Unable to read file");
+    let data = fs::read_to_string("inputs/day4.txt").expect("Unable to read file");
 
     println!("Part 1: {}", part1(parse_input(&data)));
     println!("Part 2: {}", part2(parse_input(&data)));
@@ -289,7 +289,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_part1() {
+    fn test_part1_example() {
         let data = String::from("ecl:gry pid:860033327 eyr:2020 hcl:#fffffd
 byr:1937 iyr:2017 cid:147 hgt:183cm
 
@@ -308,7 +308,7 @@ iyr:2011 ecl:brn hgt:59in");
     }
 
     #[test]
-    fn test_part2() {
+    fn test_part2_example() {
         let data = String::from("eyr:1972 cid:100
 hcl:#18171d ecl:amb hgt:170 pid:186cm iyr:2018 byr:1926
 
