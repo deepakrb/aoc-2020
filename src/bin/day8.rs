@@ -5,6 +5,7 @@ fn main() {
     let data = fs::read_to_string("inputs/day8.txt").expect("Unable to read file");
 
     println!("Part 1: {}", part1(parse_input(data.as_str())));
+    println!("Part 2: {}", part2(parse_input(data.as_str())));
 }
 
 struct Parser {
@@ -13,6 +14,7 @@ struct Parser {
 
     ops: Vec<(String, i32)>,
     run_ops: HashSet<i32>,
+    is_error: bool,
 }
 
 impl Parser {
@@ -22,6 +24,7 @@ impl Parser {
             acc: 0,
             ops,
             run_ops: Default::default(),
+            is_error: false,
         }
     }
 
@@ -29,6 +32,7 @@ impl Parser {
         loop {
             let (op, value) = &self.ops[self.ip as usize];
             if self.run_ops.contains(&self.ip) {
+                self.is_error = true;
                 return self;
             }
 
@@ -56,8 +60,8 @@ impl Parser {
         }
     }
 
-    fn get_acc(&mut self) -> i32 {
-        self.acc
+    fn get_result(&mut self) -> (i32, bool) {
+        (self.acc, self.is_error)
     }
 }
 
@@ -124,7 +128,70 @@ Immediately before the program would run an instruction a second time, the value
 Run your copy of the boot code. Immediately before any instruction is executed a second time, what value is in the accumulator?
  */
 fn part1(operations: Vec<(String, i32)>) -> i32 {
-    Parser::new(operations).run().get_acc()
+    let (result, _) = Parser::new(operations).run().get_result();
+    result
+}
+
+/*
+--- Part Two ---
+
+After some careful analysis, you believe that exactly one instruction is corrupted.
+
+Somewhere in the program, either a jmp is supposed to be a nop, or a nop is supposed to be a jmp. (No acc instructions were harmed in the corruption of this boot code.)
+
+The program is supposed to terminate by attempting to execute an instruction immediately after the last instruction in the file. By changing exactly one jmp or nop, you can repair the boot code and make it terminate correctly.
+
+For example, consider the same program from above:
+
+nop +0
+acc +1
+jmp +4
+acc +3
+jmp -3
+acc -99
+acc +1
+jmp -4
+acc +6
+
+If you change the first instruction from nop +0 to jmp +0, it would create a single-instruction infinite loop, never leaving that instruction. If you change almost any of the jmp instructions, the program will still eventually find another jmp instruction and loop forever.
+
+However, if you change the second-to-last instruction (from jmp -4 to nop -4), the program terminates! The instructions are visited in this order:
+
+nop +0  | 1
+acc +1  | 2
+jmp +4  | 3
+acc +3  |
+jmp -3  |
+acc -99 |
+acc +1  | 4
+nop -4  | 5
+acc +6  | 6
+
+After the last instruction (acc +6), the program terminates by attempting to run the instruction below the last instruction in the file. With this change, after the program terminates, the accumulator contains the value 8 (acc +1, acc +1, acc +6).
+
+Fix the program so that it terminates normally by changing exactly one jmp (to nop) or nop (to jmp). What is the value of the accumulator after the program terminates?
+ */
+fn part2(operations: Vec<(String, i32)>) -> i32 {
+    // generate every iteration of jmp => nop, nop => jump
+    for (i, (op, _)) in operations.iter().enumerate() {
+        if op != "nop" && op != "jmp" {
+            continue;
+        }
+
+        let mut ops = operations.clone();
+        match op.as_str() {
+            "nop" => ops[i].0 = "jmp".parse().unwrap(),
+            "jmp" => ops[i].0 = "nop".parse().unwrap(),
+            _ => {}
+        }
+
+        let (result, error) = Parser::new(ops).run().get_result();
+        if !error {
+            return result;
+        }
+    }
+
+    0
 }
 
 #[cfg(test)]
@@ -143,5 +210,19 @@ acc +1
 jmp -4
 acc +6";
         assert_eq!(part1(parse_input(input)), 5)
+    }
+
+    #[test]
+    fn test_part2_example() {
+        let input = "nop +0
+acc +1
+jmp +4
+acc +3
+jmp -3
+acc -99
+acc +1
+jmp -4
+acc +6";
+        assert_eq!(part2(parse_input(input)), 8)
     }
 }
