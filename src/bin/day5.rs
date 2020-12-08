@@ -1,5 +1,5 @@
-use std::fs;
 use std::collections::HashSet;
+use std::fs;
 use std::iter::FromIterator;
 
 fn main() {
@@ -10,7 +10,8 @@ fn main() {
 }
 
 fn parse_input(input: &str) -> Vec<&str> {
-    input.lines()
+    input
+        .lines()
         .map(|l| l.trim())
         .filter(|l| !l.is_empty())
         .collect()
@@ -77,16 +78,19 @@ What is the ID of your seat?
 fn part2(inputs: Vec<&str>) -> i32 {
     let found_ids: HashSet<i32> = HashSet::from_iter(get_ids(inputs).iter().cloned());
 
-    let all_possible_ids: HashSet<i32> = (*found_ids.iter().min().unwrap()..*found_ids.iter().max().unwrap()).collect();
+    let all_possible_ids: HashSet<i32> =
+        (*found_ids.iter().min().unwrap()..*found_ids.iter().max().unwrap()).collect();
     *all_possible_ids.difference(&found_ids).next().unwrap() as i32
 }
 
 fn get_ids(inputs: Vec<&str>) -> Vec<i32> {
-    inputs.iter()
+    inputs
+        .iter()
         .map(|input| {
             let (row, column) = get_row_value(input.parse().unwrap());
-            return (row * 8) + column
-        }).collect()
+            return (row * 8) + column;
+        })
+        .collect()
 }
 
 fn get_row_value(operation: String) -> (i32, i32) {
@@ -100,11 +104,13 @@ fn get_row_value(operation: String) -> (i32, i32) {
         let new_column = ((column_limit - column_floor) / 2) + column_floor;
 
         match c {
-            'F' => { row_limit = new_row },
-            'B' => { row_floor = new_row },
-            'L' => { column_limit = new_column },
-            'R' => { column_floor = new_column },
-            _ => { panic!("unknown char")}
+            'F' => row_limit = new_row,
+            'B' => row_floor = new_row,
+            'L' => column_limit = new_column,
+            'R' => column_floor = new_column,
+            _ => {
+                panic!("unknown char")
+            }
         }
     });
 

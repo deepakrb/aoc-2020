@@ -1,15 +1,18 @@
-use std::fs;
-use std::collections::{HashMap, HashSet};
 use lazy_static::lazy_static;
 use regex::Regex;
+use std::collections::{HashMap, HashSet};
+use std::fs;
 use std::iter::FromIterator;
 
 lazy_static! {
     static ref HEIGHT_RE: Regex = Regex::new(r"(\d+)(in|cm)").unwrap();
     static ref HAIR_COLOR_RE: Regex = Regex::new(r"\#[a-z0-9]{6}").unwrap();
     static ref PID_RE: Regex = Regex::new(r"[0-9]{9}").unwrap();
-
-    static ref EYE_COLOR: HashSet<&'static str> = HashSet::from_iter(vec!["amb", "blu", "brn", "gry", "grn", "hzl", "oth"].iter().cloned());
+    static ref EYE_COLOR: HashSet<&'static str> = HashSet::from_iter(
+        vec!["amb", "blu", "brn", "gry", "grn", "hzl", "oth"]
+            .iter()
+            .cloned()
+    );
 }
 
 fn main() {
@@ -20,26 +23,24 @@ fn main() {
 }
 
 fn parse_input(data: &str) -> Vec<&str> {
-    return  data.split("\n\n")
-        .collect();
+    return data.split("\n\n").collect();
 }
 
 fn get_tokenized_input(passport: &str) -> HashMap<&str, &str> {
     let mut input: HashMap<&str, &str> = HashMap::new();
 
-    passport.lines()
+    passport
+        .lines()
         .map(|l| l.trim())
         .into_iter()
         .for_each(|l| {
-            l.split(" ")
-                .into_iter()
-                .for_each(|item| {
-                    let kv: Vec<&str> = item.split(":").collect();
-                    input.insert(kv[0], kv[1]);
-                })
+            l.split(" ").into_iter().for_each(|item| {
+                let kv: Vec<&str> = item.split(":").collect();
+                input.insert(kv[0], kv[1]);
+            })
         });
 
-    return input
+    return input;
 }
 
 /*
@@ -91,27 +92,28 @@ According to the above rules, your improved system would report 2 valid passport
 Count the number of valid passports - those that have all required fields. Treat cid as optional. In your batch file, how many passports are valid?
  */
 fn part1(inputs: Vec<&str>) -> i32 {
-    let output: Vec<&&str> = inputs.iter()
+    let output: Vec<&&str> = inputs
+        .iter()
         .filter(|input| has_valid_keys(input))
         .collect();
 
-    return output.len() as i32
+    return output.len() as i32;
 }
 
 fn has_valid_keys(passport: &str) -> bool {
     let keys = get_tokenized_input(passport);
 
     if keys.len() < 7 {
-        return false
+        return false;
     }
 
     for key in vec!["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"] {
         if !keys.contains_key(key) {
-            return false
+            return false;
         }
     }
 
-    return true
+    return true;
 }
 
 /*
@@ -186,11 +188,12 @@ iyr:2010 hgt:158cm hcl:#b6652a ecl:blu byr:1944 eyr:2021 pid:093154719
 Count the number of valid passports - those that have all required fields and valid values. Continue to treat cid as optional. In your batch file, how many passports are valid?
  */
 fn part2(inputs: Vec<&str>) -> i32 {
-    let output: Vec<&&str> = inputs.iter()
+    let output: Vec<&&str> = inputs
+        .iter()
         .filter(|input| passport_has_valid_contents(input))
         .collect();
 
-    return output.len() as i32
+    return output.len() as i32;
 }
 
 fn passport_has_valid_contents(passport: &str) -> bool {
@@ -200,7 +203,7 @@ fn passport_has_valid_contents(passport: &str) -> bool {
     // but its not worth the time and extra complexity for something this simple
     for key in vec!["byr", "iyr", "eyr", "hgt", "hcl", "ecl", "pid"] {
         if !kvs.contains_key(key) {
-            return false
+            return false;
         }
     }
 
@@ -208,27 +211,31 @@ fn passport_has_valid_contents(passport: &str) -> bool {
         if key == &"byr" {
             let year = value.parse::<i32>().unwrap();
             if year < 1920 || year > 2002 {
-                return false
+                return false;
             }
         }
 
         if key == &"iyr" {
             let year = value.parse::<i32>().unwrap();
             if year < 2010 || year > 2020 {
-                return false
+                return false;
             }
         }
 
         if key == &"eyr" {
             let year = value.parse::<i32>().unwrap();
             if year < 2020 || year > 2030 {
-                return false
+                return false;
             }
         }
 
         if key == &"hgt" {
             match get_height(value) {
-                Some(height) => if !height.is_valid_height() { return false; },
+                Some(height) => {
+                    if !height.is_valid_height() {
+                        return false;
+                    }
+                }
                 None => return false,
             }
         }
@@ -252,7 +259,7 @@ fn passport_has_valid_contents(passport: &str) -> bool {
         }
     }
 
-    return true
+    return true;
 }
 
 struct Height {
@@ -272,17 +279,16 @@ fn get_height(line: &str) -> Option<Height> {
 impl Height {
     fn is_valid_height(&self) -> bool {
         if self.unit == "cm" {
-            return self.value >= 150 && self.value <= 193
+            return self.value >= 150 && self.value <= 193;
         }
 
         if self.unit == "in" {
-            return self.value >= 59 && self.value <= 76
+            return self.value >= 59 && self.value <= 76;
         }
 
-        return false
+        return false;
     }
 }
-
 
 #[cfg(test)]
 mod tests {
@@ -290,7 +296,8 @@ mod tests {
 
     #[test]
     fn test_part1_example() {
-        let data = String::from("ecl:gry pid:860033327 eyr:2020 hcl:#fffffd
+        let data = String::from(
+            "ecl:gry pid:860033327 eyr:2020 hcl:#fffffd
 byr:1937 iyr:2017 cid:147 hgt:183cm
 
 iyr:2013 ecl:amb cid:350 eyr:2023 pid:028048884
@@ -302,14 +309,16 @@ ecl:brn pid:760753108 byr:1931
 hgt:179cm
 
 hcl:#cfa07d eyr:2025 pid:166559648
-iyr:2011 ecl:brn hgt:59in");
+iyr:2011 ecl:brn hgt:59in",
+        );
 
         assert_eq!(part1(parse_input(&data)), 2)
     }
 
     #[test]
     fn test_part2_example() {
-        let data = String::from("eyr:1972 cid:100
+        let data = String::from(
+            "eyr:1972 cid:100
 hcl:#18171d ecl:amb hgt:170 pid:186cm iyr:2018 byr:1926
 
 iyr:2019
@@ -334,7 +343,8 @@ hgt:164cm byr:2001 iyr:2015 cid:88
 pid:545766238 ecl:hzl
 eyr:2022
 
-iyr:2010 hgt:158cm hcl:#b6652a ecl:blu byr:1944 eyr:2021 pid:093154719");
+iyr:2010 hgt:158cm hcl:#b6652a ecl:blu byr:1944 eyr:2021 pid:093154719",
+        );
 
         assert_eq!(part2(parse_input(&data)), 4)
     }

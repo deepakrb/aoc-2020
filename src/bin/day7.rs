@@ -1,6 +1,6 @@
-use std::fs;
-use std::collections::{HashMap, HashSet};
 use std::collections::hash_map::Entry;
+use std::collections::{HashMap, HashSet};
+use std::fs;
 use std::iter::FromIterator;
 
 fn main() {
@@ -11,19 +11,30 @@ fn main() {
 }
 
 fn parse_input(input: String) -> Vec<(String, Vec<(String, i32)>)> {
-    input.lines()
+    input
+        .lines()
         .map(|l| l.trim())
         .filter(|&l| l.is_empty() || !l.contains("contain no other bags"))
         .map(|l| {
             let instruction: Vec<&str> = l.split("contain").collect();
-            let container = instruction[0].split(' ').take(2).collect::<Vec<&str>>().join("_");
-            let bags = instruction[1].split(',')
+            let container = instruction[0]
+                .split(' ')
+                .take(2)
+                .collect::<Vec<&str>>()
+                .join("_");
+            let bags = instruction[1]
+                .split(',')
                 .map(|contains| {
                     let c = contains.trim().split(' ').collect::<Vec<&str>>();
-                    (String::from(c[1..3].join("_")), c[0].parse::<i32>().unwrap())
-                }).collect::<Vec<(String, i32)>>();
+                    (
+                        String::from(c[1..3].join("_")),
+                        c[0].parse::<i32>().unwrap(),
+                    )
+                })
+                .collect::<Vec<(String, i32)>>();
             (container, bags)
-        }).collect()
+        })
+        .collect()
 }
 
 /*
@@ -62,24 +73,36 @@ How many bag colors can eventually contain at least one shiny gold bag? (The lis
  */
 fn part1(input: Vec<(String, Vec<(String, i32)>)>) -> i32 {
     // build a reverse index { bag_x: Set(every bag that can contain bag_x) }
-    let mapping: HashMap<String, HashSet<String>> = input.iter()
-        .fold(HashMap::new(), |mut acc, (container, bags)| {
-            bags.iter().for_each(|(bag, _)| {
-                match acc.entry(String::from(bag)) {
-                    Entry::Vacant(e) => { e.insert(HashSet::from_iter(vec![container.to_owned()].into_iter())); },
-                    Entry::Occupied(mut e) => { e.get_mut().insert(container.to_owned()); }
-                }
+    let mapping: HashMap<String, HashSet<String>> =
+        input
+            .iter()
+            .fold(HashMap::new(), |mut acc, (container, bags)| {
+                bags.iter()
+                    .for_each(|(bag, _)| match acc.entry(String::from(bag)) {
+                        Entry::Vacant(e) => {
+                            e.insert(HashSet::from_iter(vec![container.to_owned()].into_iter()));
+                        }
+                        Entry::Occupied(mut e) => {
+                            e.get_mut().insert(container.to_owned());
+                        }
+                    });
+                acc
             });
-            acc
-        });
 
     bag_has_containers(&mapping, String::from("shiny_gold"), &mut HashSet::new())
 }
 
-fn bag_has_containers(mapping: &HashMap<String, HashSet<String>>, color: String, containers_accumulator: &mut HashSet<String>) -> i32 {
-    if !mapping.contains_key(&color) { return containers_accumulator.len() as i32 }
+fn bag_has_containers(
+    mapping: &HashMap<String, HashSet<String>>,
+    color: String,
+    containers_accumulator: &mut HashSet<String>,
+) -> i32 {
+    if !mapping.contains_key(&color) {
+        return containers_accumulator.len() as i32;
+    }
 
-    mapping[&color].iter()
+    mapping[&color]
+        .iter()
         .filter(|contents| contents.to_string() != color.to_string()) // avoid recursion
         .for_each(|color| {
             containers_accumulator.insert(color.to_string());
@@ -120,20 +143,26 @@ In this example, a single shiny gold bag must contain 126 other bags.
 How many individual bags are required inside your single shiny gold bag?
  */
 fn part2(input: Vec<(String, Vec<(String, i32)>)>) -> i32 {
-    let mapping: HashMap<String, Vec<(String, i32)>> = input.iter()
-        .fold(HashMap::new(), |mut acc, x| {
-            acc.insert(x.0.clone(), x.1.clone()); acc
+    let mapping: HashMap<String, Vec<(String, i32)>> =
+        input.iter().fold(HashMap::new(), |mut acc, x| {
+            acc.insert(x.0.clone(), x.1.clone());
+            acc
         });
 
     bag_contains(String::from("shiny_gold"), &mapping)
 }
 
 fn bag_contains(bag: String, mapping: &HashMap<String, Vec<(String, i32)>>) -> i32 {
-    if !mapping.contains_key(&bag) { return 0 }
+    if !mapping.contains_key(&bag) {
+        return 0;
+    }
 
-    mapping[&bag].iter().map(|(contained_bag, count)|
-        count + count * bag_contains(String::from(contained_bag), mapping)
-    ).sum()
+    mapping[&bag]
+        .iter()
+        .map(|(contained_bag, count)| {
+            count + count * bag_contains(String::from(contained_bag), mapping)
+        })
+        .sum()
 }
 
 #[cfg(test)]

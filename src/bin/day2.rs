@@ -55,12 +55,12 @@ fn main() {
     for input in inputs.iter() {
         let parsed_input: Vec<_> = input.split(|c| c == ',').collect();
         let (lower_bound, upper_bound, character, pass) = (
-            parsed_input[0].parse::<i32>().unwrap(), 
-            parsed_input[1].parse::<i32>().unwrap(), 
-            parsed_input[2].chars().next().unwrap(), 
-            parsed_input[3]
+            parsed_input[0].parse::<i32>().unwrap(),
+            parsed_input[1].parse::<i32>().unwrap(),
+            parsed_input[2].chars().next().unwrap(),
+            parsed_input[3],
         );
-        
+
         if is_valid(&pass, character, lower_bound, upper_bound) {
             valid_passes.push(pass)
         }
@@ -83,12 +83,12 @@ fn is_valid(pass: &str, character: char, lower_bound: i32, upper_bound: i32) -> 
     }
 
     if contains_lower && contains_upper {
-        return false
+        return false;
     }
 
     if !contains_lower && !contains_upper {
-        return false
+        return false;
     }
 
-    return true
+    return true;
 }

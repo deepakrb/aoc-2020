@@ -2,13 +2,14 @@ use std::fs;
 
 fn main() {
     let data = fs::read_to_string("inputs/day3.txt").expect("Unable to read file");
-    let sf = SlopeFinder{data: parse(&data)};
+    let sf = SlopeFinder { data: parse(&data) };
     part_1(&sf);
     part_2(&sf);
 }
 
-fn parse(input: &str) -> Vec<Vec<char>>{
-    return input.lines()
+fn parse(input: &str) -> Vec<Vec<char>> {
+    return input
+        .lines()
         .map(|l| l.trim())
         .filter(|l| !l.is_empty())
         .map(|l| l.chars().collect())
@@ -16,7 +17,7 @@ fn parse(input: &str) -> Vec<Vec<char>>{
 }
 
 struct SlopeFinder {
-    data: Vec<Vec<char>>
+    data: Vec<Vec<char>>,
 }
 
 impl SlopeFinder {
@@ -121,8 +122,9 @@ In the above example, these slopes would find 2, 7, 3, 4, and 2 tree(s) respecti
 What do you get if you multiply together the number of trees encountered on each of the listed slopes?
  */
 fn part_2(sf: &SlopeFinder) {
-    let inputs: Vec<(i64,i64)> =  vec![(1,1), (1,3), (1,5), (1,7), (2, 1)];
-    let trees_hit: i64 = inputs.iter()
+    let inputs: Vec<(i64, i64)> = vec![(1, 1), (1, 3), (1, 5), (1, 7), (2, 1)];
+    let trees_hit: i64 = inputs
+        .iter()
         .map(|input| sf.find_trees_hit(input.0, input.1))
         .fold(1, |acc, x| x * acc);
 

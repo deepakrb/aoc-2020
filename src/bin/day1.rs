@@ -35,7 +35,8 @@ Of course, your expense report is much larger. Find the two entries that sum to 
 fn main() {
     let data = fs::read_to_string("inputs/day1.txt").expect("Unable to read file");
 
-    let input = data.lines()
+    let input = data
+        .lines()
         .map(|l| l.trim())
         .filter(|l| !l.is_empty())
         .map(|l| l.parse::<i32>().unwrap())
@@ -43,9 +44,14 @@ fn main() {
 
     let mut available_inputs: HashSet<i32> = HashSet::new();
 
-    let filtered_inputs = input.iter()
+    let filtered_inputs = input
+        .iter()
         .filter(|&x| x < &2020)
-        .map(|&x| { available_inputs.insert(x); x }).collect::<Vec<i32>>();
+        .map(|&x| {
+            available_inputs.insert(x);
+            x
+        })
+        .collect::<Vec<i32>>();
 
     for item in filtered_inputs.iter() {
         let goal = 2020 - item;
@@ -55,18 +61,28 @@ fn main() {
             Err(_) => continue,
         };
 
-        println!("Total: {}, 1: {}, 2: {}, 3: {}", (item*matching.0*matching.1), item, matching.0, matching.1)
+        println!(
+            "Total: {}, 1: {}, 2: {}, 3: {}",
+            (item * matching.0 * matching.1),
+            item,
+            matching.0,
+            matching.1
+        )
     }
 }
 
-fn is_present(max_value: i32, inputs: &Vec<i32>, set: &HashSet<i32>) -> Result<(i32, i32), &'static str> {
+fn is_present(
+    max_value: i32,
+    inputs: &Vec<i32>,
+    set: &HashSet<i32>,
+) -> Result<(i32, i32), &'static str> {
     for input in inputs.iter() {
         let goal = max_value - input;
 
         if goal > 0 && set.contains(&goal) {
-            return Ok((*input, goal))
+            return Ok((*input, goal));
         }
     }
 
-    return Err("not found")
+    return Err("not found");
 }
