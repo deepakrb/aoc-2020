@@ -40,7 +40,7 @@ fn get_tokenized_input(passport: &str) -> HashMap<&str, &str> {
             })
         });
 
-    return input;
+    input
 }
 
 /*
@@ -92,12 +92,11 @@ According to the above rules, your improved system would report 2 valid passport
 Count the number of valid passports - those that have all required fields. Treat cid as optional. In your batch file, how many passports are valid?
  */
 fn part1(inputs: Vec<&str>) -> i32 {
-    let output: Vec<&&str> = inputs
+    inputs
         .iter()
         .filter(|input| has_valid_keys(input))
-        .collect();
-
-    return output.len() as i32;
+        .collect::<Vec<&&str>>()
+        .len() as i32
 }
 
 fn has_valid_keys(passport: &str) -> bool {
@@ -188,12 +187,11 @@ iyr:2010 hgt:158cm hcl:#b6652a ecl:blu byr:1944 eyr:2021 pid:093154719
 Count the number of valid passports - those that have all required fields and valid values. Continue to treat cid as optional. In your batch file, how many passports are valid?
  */
 fn part2(inputs: Vec<&str>) -> i32 {
-    let output: Vec<&&str> = inputs
+    inputs
         .iter()
         .filter(|input| passport_has_valid_contents(input))
-        .collect();
-
-    return output.len() as i32;
+        .collect::<Vec<&&str>>()
+        .len() as i32
 }
 
 fn passport_has_valid_contents(passport: &str) -> bool {

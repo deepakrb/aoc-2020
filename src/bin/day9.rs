@@ -1,11 +1,14 @@
 use std::collections::HashSet;
 use std::fs;
 
+#[derive(Debug)]
+struct StringErr(String);
+
 fn main() {
     let data = fs::read_to_string("inputs/day9.txt").expect("Unable to read file");
 
     println!("Part 1: {}", part1(parse_input(data.as_str()), 25));
-    println!("Part 2: {}", part2(parse_input(data.as_str()), 25));
+    println!("Part 2: {}", part2(parse_input(data.as_str()), 25).unwrap());
 }
 
 fn parse_input(input: &str) -> Vec<i64> {
@@ -17,7 +20,7 @@ fn parse_input(input: &str) -> Vec<i64> {
         .collect()
 }
 
-fn get_first_invalid_number(inputs: &Vec<i64>, preamble_length: usize) -> i64 {
+fn get_first_invalid_number(inputs: &Vec<i64>, preamble_length: usize) -> Result<i64, StringErr> {
     for (i, input) in inputs.iter().enumerate() {
         if i <= preamble_length {
             continue;
@@ -34,11 +37,11 @@ fn get_first_invalid_number(inputs: &Vec<i64>, preamble_length: usize) -> i64 {
         let combinations = get_combinations(preamble);
 
         if !combinations.contains(input) {
-            return *input;
+            return Ok(*input);
         }
     }
 
-    0
+    Err(StringErr("no_result".to_owned()))
 }
 
 fn get_combinations(preamble: Vec<&i64>) -> HashSet<i64> {
@@ -103,7 +106,7 @@ In this example, after the 5-number preamble, almost every number is the sum of 
 The first step of attacking the weakness in the XMAS data is to find the first number in the list (after the preamble) which is not the sum of two of the 25 numbers before it. What is the first number that does not have this property?
  */
 fn part1(inputs: Vec<i64>, preamble_length: usize) -> i64 {
-    get_first_invalid_number(&inputs, preamble_length)
+    get_first_invalid_number(&inputs, preamble_length).unwrap()
 }
 
 /*
@@ -140,8 +143,8 @@ To find the encryption weakness, add together the smallest and largest number in
 
 What is the encryption weakness in your XMAS-encrypted list of numbers?
  */
-fn part2(inputs: Vec<i64>, preamble_length: usize) -> i64 {
-    let invalid_number = get_first_invalid_number(&inputs, preamble_length);
+fn part2(inputs: Vec<i64>, preamble_length: usize) -> Result<i64, StringErr> {
+    let invalid_number = get_first_invalid_number(&inputs, preamble_length).unwrap();
 
     // uses a head (idx_head) and tail (idx_tail) pointer to iterate through
     // the inputs list.
@@ -155,8 +158,8 @@ fn part2(inputs: Vec<i64>, preamble_length: usize) -> i64 {
 
             // success
             if rolling_sum + current_number == invalid_number {
-                return considered_numbers.iter().min().unwrap()
-                    + considered_numbers.iter().max().unwrap();
+                return Ok(considered_numbers.iter().min().unwrap()
+                    + considered_numbers.iter().max().unwrap());
             }
 
             // moves the idx_head forward
@@ -170,7 +173,7 @@ fn part2(inputs: Vec<i64>, preamble_length: usize) -> i64 {
         }
     }
 
-    0
+    Err(StringErr("no_result".to_owned()))
 }
 
 mod tests {
@@ -223,6 +226,6 @@ mod tests {
 277
 309
 576";
-        assert_eq!(part2(parse_input(input), 5), 62)
+        assert_eq!(part2(parse_input(input), 5).unwrap(), 62)
     }
 }

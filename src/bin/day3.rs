@@ -3,8 +3,9 @@ use std::fs;
 fn main() {
     let data = fs::read_to_string("inputs/day3.txt").expect("Unable to read file");
     let sf = SlopeFinder { data: parse(&data) };
-    part_1(&sf);
-    part_2(&sf);
+
+    println!("Part 1: {}", part1(&sf));
+    println!("Part 2: {}", part2(&sf));
 }
 
 fn parse(input: &str) -> Vec<Vec<char>> {
@@ -100,8 +101,8 @@ In this example, traversing the map using this slope would cause you to encounte
 
 Starting at the top-left corner of your map and following a slope of right 3 and down 1, how many trees would you encounter?
 */
-fn part_1(sf: &SlopeFinder) {
-    println!("Part 1: {}", sf.find_trees_hit(1, 3));
+fn part1(sf: &SlopeFinder) -> i64 {
+    sf.find_trees_hit(1, 3)
 }
 
 /*
@@ -121,12 +122,49 @@ In the above example, these slopes would find 2, 7, 3, 4, and 2 tree(s) respecti
 
 What do you get if you multiply together the number of trees encountered on each of the listed slopes?
  */
-fn part_2(sf: &SlopeFinder) {
+fn part2(sf: &SlopeFinder) -> i64 {
     let inputs: Vec<(i64, i64)> = vec![(1, 1), (1, 3), (1, 5), (1, 7), (2, 1)];
-    let trees_hit: i64 = inputs
+    inputs
         .iter()
         .map(|input| sf.find_trees_hit(input.0, input.1))
-        .fold(1, |acc, x| x * acc);
+        .fold(1, |acc, x| x * acc)
+}
 
-    println!("Part 2: {:?}", trees_hit);
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_part1_example() {
+        let input = "..##.......
+#...#...#..
+.#....#..#.
+..#.#...#.#
+.#...##..#.
+..#.##.....
+.#.#.#....#
+.#........#
+#.##...#...
+#...##....#
+.#..#...#.#";
+
+        assert_eq!(part1(&SlopeFinder { data: parse(input) }), 7)
+    }
+
+    #[test]
+    fn test_part2_example() {
+        let input = "..##.......
+#...#...#..
+.#....#..#.
+..#.#...#.#
+.#...##..#.
+..#.##.....
+.#.#.#....#
+.#........#
+#.##...#...
+#...##....#
+.#..#...#.#";
+
+        assert_eq!(part2(&SlopeFinder { data: parse(input) }), 336)
+    }
 }

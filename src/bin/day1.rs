@@ -1,7 +1,35 @@
 use std::collections::HashSet;
 use std::fs;
-// NOTE: Day 1 and 2 are incorrectly formatted and only contain the last answer, they need to be updated
-// to include the working for Part 1
+use std::iter::FromIterator;
+
+fn main() {
+    let data = fs::read_to_string("inputs/day1.txt").expect("Unable to read file");
+
+    println!("Part 1: {}", part1(parse_input(&data)));
+    println!("Part 2 {}", part2(parse_input(&data)).unwrap());
+}
+
+fn parse_input(input: &str) -> Vec<i32> {
+    input
+        .lines()
+        .map(|l| l.trim())
+        .filter(|l| !l.is_empty())
+        .map(|l| l.parse::<i32>().unwrap())
+        .filter(|v| *v < 2020)
+        .collect()
+}
+
+fn does_match(goal: i32, set: &HashSet<&i32>) -> Result<(i32, i32), &'static str> {
+    for &input in set.iter() {
+        let new_goal = goal - *input;
+
+        if new_goal > 0 && set.contains(&new_goal) {
+            return Ok((*input, new_goal));
+        }
+    }
+
+    return Err("not_found");
+}
 
 /*
 --- Day 1: Report Repair ---
@@ -30,59 +58,62 @@ For example, suppose your expense report contained the following:
 In this list, the two entries that sum to 2020 are 1721 and 299. Multiplying them together produces 1721 * 299 = 514579, so the correct answer is 514579.
 
 Of course, your expense report is much larger. Find the two entries that sum to 2020; what do you get if you multiply them together?
-
  */
-fn main() {
-    let data = fs::read_to_string("inputs/day1.txt").expect("Unable to read file");
+fn part1(input: Vec<i32>) -> i32 {
+    let (x, y) = does_match(2020, &HashSet::from_iter(input.iter())).unwrap();
+    x * y
+}
 
-    let input = data
-        .lines()
-        .map(|l| l.trim())
-        .filter(|l| !l.is_empty())
-        .map(|l| l.parse::<i32>().unwrap())
-        .collect::<Vec<i32>>();
+/*
+--- Part Two ---
 
-    let mut available_inputs: HashSet<i32> = HashSet::new();
+The Elves in accounting are thankful for your help; one of them even offers you a starfish coin they had left over from a past vacation. They offer you a second one if you can find three numbers in your expense report that meet the same criteria.
 
-    let filtered_inputs = input
-        .iter()
-        .filter(|&x| x < &2020)
-        .map(|&x| {
-            available_inputs.insert(x);
-            x
-        })
-        .collect::<Vec<i32>>();
+Using the above example again, the three entries that sum to 2020 are 979, 366, and 675. Multiplying them together produces the answer, 241861950.
 
-    for item in filtered_inputs.iter() {
-        let goal = 2020 - item;
+In your expense report, what is the product of the three entries that sum to 2020?
+ */
+fn part2(input: Vec<i32>) -> Result<i32, &'static str> {
+    let all_inputs: HashSet<&i32> = HashSet::from_iter(input.iter());
 
-        let matching = match is_present(goal, &filtered_inputs, &available_inputs) {
+    for item in input.iter() {
+        let goal = 2020 - *item;
+
+        let (x, y) = match does_match(goal, &all_inputs) {
             Ok(f) => f,
             Err(_) => continue,
         };
 
-        println!(
-            "Total: {}, 1: {}, 2: {}, 3: {}",
-            (item * matching.0 * matching.1),
-            item,
-            matching.0,
-            matching.1
-        )
+        return Ok(item * x * y);
     }
+    Err("not_found")
 }
 
-fn is_present(
-    max_value: i32,
-    inputs: &Vec<i32>,
-    set: &HashSet<i32>,
-) -> Result<(i32, i32), &'static str> {
-    for input in inputs.iter() {
-        let goal = max_value - input;
+#[cfg(test)]
+mod tests {
+    use super::*;
 
-        if goal > 0 && set.contains(&goal) {
-            return Ok((*input, goal));
-        }
+    #[test]
+    fn test_part_1_example() {
+        let input = "1721
+979
+366
+299
+675
+1456";
+
+        assert_eq!(part1(parse_input(input)), 514579);
     }
 
-    return Err("not found");
+    #[test]
+    fn test_part_2_example() {
+        let input = "1721
+979
+366
+299
+675
+1456";
+
+        assert_eq!(part2(parse_input(input)).unwrap(), 241861950);
+    }
 }

@@ -1,11 +1,14 @@
 use std::collections::HashSet;
 use std::fs;
 
+#[derive(Debug)]
+struct StringErr(String);
+
 fn main() {
     let data = fs::read_to_string("inputs/day8.txt").expect("Unable to read file");
 
     println!("Part 1: {}", part1(parse_input(data.as_str())));
-    println!("Part 2: {}", part2(parse_input(data.as_str())));
+    println!("Part 2: {}", part2(parse_input(data.as_str())).unwrap());
 }
 
 struct Parser {
@@ -170,7 +173,7 @@ After the last instruction (acc +6), the program terminates by attempting to run
 
 Fix the program so that it terminates normally by changing exactly one jmp (to nop) or nop (to jmp). What is the value of the accumulator after the program terminates?
  */
-fn part2(operations: Vec<(String, i32)>) -> i32 {
+fn part2(operations: Vec<(String, i32)>) -> Result<i32, StringErr> {
     // generate every iteration of jmp => nop, nop => jump
     for (i, (op, _)) in operations.iter().enumerate() {
         if op != "nop" && op != "jmp" {
@@ -186,11 +189,11 @@ fn part2(operations: Vec<(String, i32)>) -> i32 {
 
         let (result, is_loop) = Parser::new(ops).run().get_result();
         if !is_loop {
-            return result;
+            return Ok(result);
         }
     }
 
-    0
+    Err(StringErr("no result".to_owned()))
 }
 
 #[cfg(test)]
@@ -222,6 +225,6 @@ acc -99
 acc +1
 jmp -4
 acc +6";
-        assert_eq!(part2(parse_input(input)), 8)
+        assert_eq!(part2(parse_input(input)).unwrap(), 8)
     }
 }

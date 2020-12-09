@@ -1,6 +1,29 @@
+use std::collections::HashMap;
 use std::fs;
-// NOTE: Day 1 and 2 are incorrectly formatted and only contain the last answer, they need to be updated
-// to include the working for Part 1
+
+fn main() {
+    let data = fs::read_to_string("inputs/day2.txt").expect("Unable to read file");
+
+    println!("Part 1: {}", part1(parse_input(&data)));
+    println!("Part 2: {}", part2(parse_input(&data)));
+}
+
+fn parse_input(input: &str) -> Vec<(i32, i32, char, &str)> {
+    input
+        .lines()
+        .map(|l| l.trim())
+        .filter(|l| !l.is_empty())
+        .map(|l| {
+            let parsed_input: Vec<&str> = l.split(',').collect();
+            (
+                parsed_input[0].parse::<i32>().unwrap(),
+                parsed_input[1].parse::<i32>().unwrap(),
+                parsed_input[2].chars().next().unwrap(),
+                parsed_input[3],
+            )
+        })
+        .collect()
+}
 
 /*
 --- Day 2: Password Philosophy ---
@@ -41,44 +64,82 @@ Given the same example list from above:
 
 How many passwords are valid according to the new interpretation of the policies?
  */
-fn main() {
-    let data = fs::read_to_string("inputs/day2.txt").expect("Unable to read file");
+fn part1(inputs: Vec<(i32, i32, char, &str)>) -> i32 {
+    let mut valid_passes: Vec<&str> = vec![];
 
-    let inputs: Vec<&str> = data
-        .lines()
-        .map(|l| l.trim())
-        .filter(|l| !l.is_empty())
-        .collect();
+    for &(lb, ub, char, pass) in inputs.iter() {
+        let mut char_freq: HashMap<char, i32> = HashMap::new();
+        pass.chars().for_each(|c| match char_freq.get_mut(&c) {
+            Some(v) => *v += 1,
+            None => {
+                char_freq.insert(c, 1);
+            }
+        });
 
-    let mut valid_passes: Vec<_> = Vec::new();
-
-    for input in inputs.iter() {
-        let parsed_input: Vec<_> = input.split(|c| c == ',').collect();
-        let (lower_bound, upper_bound, character, pass) = (
-            parsed_input[0].parse::<i32>().unwrap(),
-            parsed_input[1].parse::<i32>().unwrap(),
-            parsed_input[2].chars().next().unwrap(),
-            parsed_input[3],
-        );
-
-        if is_valid(&pass, character, lower_bound, upper_bound) {
-            valid_passes.push(pass)
+        if is_valid_initial(char_freq, char, lb, ub) {
+            valid_passes.push(&pass)
         }
     }
 
-    println!("Part 2: {}", valid_passes.iter().count());
+    valid_passes.iter().count() as i32
 }
 
-fn is_valid(pass: &str, character: char, lower_bound: i32, upper_bound: i32) -> bool {
+fn is_valid_initial(
+    char_freq: HashMap<char, i32>,
+    character: char,
+    lower_bound: i32,
+    upper_bound: i32,
+) -> bool {
+    if !char_freq.contains_key(&character) {
+        return false;
+    }
+
+    if char_freq[&character] >= lower_bound && char_freq[&character] <= upper_bound {
+        return true;
+    }
+
+    return false;
+}
+
+/*
+--- Part Two ---
+
+While it appears you validated the passwords correctly, they don't seem to be what the Official Toboggan Corporate Authentication System is expecting.
+
+The shopkeeper suddenly realizes that he just accidentally explained the password policy rules from his old job at the sled rental place down the street! The Official Toboggan Corporate Policy actually works a little differently.
+
+Each policy actually describes two positions in the password, where 1 means the first character, 2 means the second character, and so on. (Be careful; Toboggan Corporate Policies have no concept of "index zero"!) Exactly one of these positions must contain the given letter. Other occurrences of the letter are irrelevant for the purposes of policy enforcement.
+
+Given the same example list from above:
+
+    1-3 a: abcde is valid: position 1 contains a and position 3 does not.
+    1-3 b: cdefg is invalid: neither position 1 nor position 3 contains b.
+    2-9 c: ccccccccc is invalid: both position 2 and position 9 contain c.
+
+How many passwords are valid according to the new interpretation of the policies?
+ */
+fn part2(inputs: Vec<(i32, i32, char, &str)>) -> i32 {
+    let mut valid_passes: Vec<&str> = vec![];
+
+    for &(lb, ub, char, pass) in inputs.iter() {
+        if is_valid_fixed(pass, char, lb as usize, ub as usize) {
+            valid_passes.push(&pass)
+        }
+    }
+
+    valid_passes.iter().count() as i32
+}
+
+fn is_valid_fixed(pass: &str, character: char, lower_bound: usize, upper_bound: usize) -> bool {
     let pass_vec: Vec<char> = pass.chars().collect();
 
     let mut contains_lower = false;
-    if pass_vec[(lower_bound) as usize - 1] == character {
+    if pass_vec[(lower_bound) - 1] == character {
         contains_lower = true
     }
 
     let mut contains_upper = false;
-    if pass_vec[(upper_bound) as usize - 1] == character {
+    if pass_vec[(upper_bound) - 1] == character {
         contains_upper = true
     }
 
@@ -91,4 +152,27 @@ fn is_valid(pass: &str, character: char, lower_bound: i32, upper_bound: i32) -> 
     }
 
     return true;
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_part_1_example() {
+        let input = "1,3,a,abcde
+1,3,b,cdefg
+2,9,c,ccccccccc";
+
+        assert_eq!(part1(parse_input(input)), 2);
+    }
+
+    #[test]
+    fn test_part_2_example() {
+        let input = "1,3,a,abcde
+1,3,b,cdefg
+2,9,c,ccccccccc";
+
+        assert_eq!(part2(parse_input(input)), 1);
+    }
 }
