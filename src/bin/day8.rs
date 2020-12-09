@@ -11,10 +11,9 @@ fn main() {
 struct Parser {
     ip: i32,
     acc: i32,
-
     ops: Vec<(String, i32)>,
     run_ops: HashSet<i32>,
-    is_error: bool,
+    is_looped: bool,
 }
 
 impl Parser {
@@ -24,7 +23,7 @@ impl Parser {
             acc: 0,
             ops,
             run_ops: Default::default(),
-            is_error: false,
+            is_looped: false,
         }
     }
 
@@ -32,7 +31,7 @@ impl Parser {
         loop {
             let (op, value) = &self.ops[self.ip as usize];
             if self.run_ops.contains(&self.ip) {
-                self.is_error = true;
+                self.is_looped = true;
                 return self;
             }
 
@@ -61,7 +60,7 @@ impl Parser {
     }
 
     fn get_result(&mut self) -> (i32, bool) {
-        (self.acc, self.is_error)
+        (self.acc, self.is_looped)
     }
 }
 
@@ -185,8 +184,8 @@ fn part2(operations: Vec<(String, i32)>) -> i32 {
             _ => {}
         }
 
-        let (result, error) = Parser::new(ops).run().get_result();
-        if !error {
+        let (result, is_loop) = Parser::new(ops).run().get_result();
+        if !is_loop {
             return result;
         }
     }

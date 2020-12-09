@@ -38,6 +38,7 @@
 |[Day 6 - Custom Customs](src/bin/day6.rs)         |[📄](https://adventofcode.com/2020/day/6)      |
 |[Day 7 - Handy Haversacks](src/bin/day7.rs)       |[📄](https://adventofcode.com/2020/day/7)      |
 |[Day 8 - Handheld Halting](src/bin/day8.rs)       |[📄](https://adventofcode.com/2020/day/8)      |
+|[Day 9 - Encoding Error](src/bin/day9.rs)         |[📄](https://adventofcode.com/2020/day/9)      |
 
 ## Links
 - [Advent of code](https://adventofcode.com/)
