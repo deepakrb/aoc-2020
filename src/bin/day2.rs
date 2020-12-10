@@ -65,23 +65,16 @@ Given the same example list from above:
 How many passwords are valid according to the new interpretation of the policies?
  */
 fn part1(inputs: Vec<(i32, i32, char, &str)>) -> i32 {
-    let mut valid_passes: Vec<&str> = vec![];
+    inputs
+        .iter()
+        .filter(|&(lb, ub, char, pass)| {
+            let mut char_freq: HashMap<char, i32> = HashMap::new();
+            pass.chars()
+                .for_each(|c| *char_freq.entry(c).or_insert(0) += 1);
 
-    for &(lb, ub, char, pass) in inputs.iter() {
-        let mut char_freq: HashMap<char, i32> = HashMap::new();
-        pass.chars().for_each(|c| match char_freq.get_mut(&c) {
-            Some(v) => *v += 1,
-            None => {
-                char_freq.insert(c, 1);
-            }
-        });
-
-        if is_valid_initial(char_freq, char, lb, ub) {
-            valid_passes.push(&pass)
-        }
-    }
-
-    valid_passes.iter().count() as i32
+            is_valid_initial(char_freq, *char, *lb, *ub)
+        })
+        .count() as i32
 }
 
 fn is_valid_initial(
@@ -119,15 +112,10 @@ Given the same example list from above:
 How many passwords are valid according to the new interpretation of the policies?
  */
 fn part2(inputs: Vec<(i32, i32, char, &str)>) -> i32 {
-    let mut valid_passes: Vec<&str> = vec![];
-
-    for &(lb, ub, char, pass) in inputs.iter() {
-        if is_valid_fixed(pass, char, lb as usize, ub as usize) {
-            valid_passes.push(&pass)
-        }
-    }
-
-    valid_passes.iter().count() as i32
+    inputs
+        .iter()
+        .filter(|(lb, ub, char, pass)| is_valid_fixed(pass, *char, *lb as usize, *ub as usize))
+        .count() as i32
 }
 
 fn is_valid_fixed(pass: &str, character: char, lower_bound: usize, upper_bound: usize) -> bool {
