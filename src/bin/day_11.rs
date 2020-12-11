@@ -22,10 +22,10 @@ lazy_static! {
 }
 
 fn main() {
-    let data = fs::read_to_string("inputs/day11.txt").expect("Unable to read file");
+    let data = fs::read_to_string("inputs/day_11.txt").expect("Unable to read file");
 
-    println!("Part 1: {}", part1(parse_input(data.as_str())));
-    println!("Part 2: {}", part2(parse_input(data.as_str())));
+    println!("Part 1: {}", part_1(parse_input(data.as_str())));
+    println!("Part 2: {}", part_2(parse_input(data.as_str())));
 }
 
 fn parse_input(input: &str) -> Vec<Vec<char>> {
@@ -130,10 +130,10 @@ At this point, something interesting happens: the chaos stabilizes and further a
 
 Simulate your seating area by applying the seating rules repeatedly until no seats change state. How many seats end up occupied?
  */
-fn part1(inputs: Vec<Vec<char>>) -> i32 {
+fn part_1(inputs: Vec<Vec<char>>) -> i32 {
     let mut previous = inputs;
     loop {
-        let next = simulate_round(&previous, &part1_strategy);
+        let next = simulate_round(&previous, &part_1_strategy);
         if is_equal(&previous, &next) {
             return get_occupied_seat_count(previous);
         }
@@ -141,7 +141,7 @@ fn part1(inputs: Vec<Vec<char>>) -> i32 {
     }
 }
 
-fn part1_strategy(inputs: Vec<Vec<char>>, seat_value: char, x: usize, y: usize) -> Change {
+fn part_1_strategy(inputs: Vec<Vec<char>>, seat_value: char, x: usize, y: usize) -> Change {
     if seat_value == 'L' {
         let unoccupied = SURROUNDING_DELTAS
             .iter()
@@ -307,10 +307,10 @@ Again, at this point, people stop shifting around and the seating area reaches e
 
 Given the new visibility method and the rule change for occupied seats becoming empty, once equilibrium is reached, how many seats end up occupied?
  */
-fn part2(inputs: Vec<Vec<char>>) -> i32 {
+fn part_2(inputs: Vec<Vec<char>>) -> i32 {
     let mut previous = inputs;
     loop {
-        let next = simulate_round(&previous, &part2_strategy);
+        let next = simulate_round(&previous, &part_2_strategy);
         if is_equal(&previous, &next) {
             return get_occupied_seat_count(previous);
         }
@@ -318,7 +318,7 @@ fn part2(inputs: Vec<Vec<char>>) -> i32 {
     }
 }
 
-fn part2_strategy(inputs: Vec<Vec<char>>, seat_value: char, x: usize, y: usize) -> Change {
+fn part_2_strategy(inputs: Vec<Vec<char>>, seat_value: char, x: usize, y: usize) -> Change {
     if seat_value == 'L' {
         let unoccupied = SURROUNDING_DELTAS
             .iter()
@@ -449,7 +449,7 @@ L.LLLLL.LL";
 #.######.#
 #.#####.##";
 
-        let next_round = simulate_round(&parse_input(input), &part1_strategy);
+        let next_round = simulate_round(&parse_input(input), &part_1_strategy);
         let output_chars = parse_input(output);
 
         assert_eq!(is_equal(&next_round, &output_chars), true)
@@ -468,7 +468,7 @@ L.#.L..#..
 #.LLLLLL.L
 #.#L#L#.##";
 
-        let next_round = simulate_round(&parse_input(repeating_input_output), &part1_strategy);
+        let next_round = simulate_round(&parse_input(repeating_input_output), &part_1_strategy);
         let output_chars = parse_input(repeating_input_output);
 
         assert_eq!(is_equal(&next_round, &output_chars), true)
@@ -487,7 +487,7 @@ LLLLLLLLLL
 L.LLLLLL.L
 L.LLLLL.LL";
 
-        assert_eq!(part1(parse_input(input)), 37)
+        assert_eq!(part_1(parse_input(input)), 37)
     }
 
     #[test]
@@ -503,6 +503,6 @@ L.LLLLL.LL";
     L.LLLLLL.L
     L.LLLLL.LL";
 
-        assert_eq!(part2(parse_input(input)), 26)
+        assert_eq!(part_2(parse_input(input)), 26)
     }
 }

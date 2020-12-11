@@ -3,10 +3,10 @@ use std::fs;
 use std::iter::FromIterator;
 
 fn main() {
-    let data = fs::read_to_string("inputs/day6.txt").expect("Unable to read file");
+    let data = fs::read_to_string("inputs/day_06.txt").expect("Unable to read file");
 
-    println!("Part 1: {}", part1(parse_input(&data)));
-    println!("Part 2: {}", part2(parse_input(&data)));
+    println!("Part 1: {}", part_1(parse_input(&data)));
+    println!("Part 2: {}", part_2(parse_input(&data)));
 }
 
 /*
@@ -54,7 +54,7 @@ In this example, the sum of these counts is 3 + 3 + 3 + 1 + 1 = 11.
 
 For each group, count the number of questions to which anyone answered "yes". What is the sum of those counts?
  */
-fn part1(groups: Vec<&str>) -> i32 {
+fn part_1(groups: Vec<&str>) -> i32 {
     groups
         .iter()
         .map(|group| {
@@ -107,7 +107,7 @@ In this example, the sum of these counts is 3 + 0 + 1 + 1 + 1 = 6.
 
 For each group, count the number of questions to which everyone answered "yes". What is the sum of those counts?
  */
-fn part2(groups: Vec<&str>) -> i32 {
+fn part_2(groups: Vec<&str>) -> i32 {
     groups
         .iter()
         .map(|group| {
@@ -155,7 +155,7 @@ a
 
 b";
 
-        assert_eq!(part1(parse_input(input)), 11);
+        assert_eq!(part_1(parse_input(input)), 11);
     }
 
     #[test]
@@ -176,6 +176,6 @@ a
 
 b";
 
-        assert_eq!(part2(parse_input(input)), 6);
+        assert_eq!(part_2(parse_input(input)), 6);
     }
 }

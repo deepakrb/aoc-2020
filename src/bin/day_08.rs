@@ -5,10 +5,10 @@ use std::fs;
 struct StringErr(String);
 
 fn main() {
-    let data = fs::read_to_string("inputs/day8.txt").expect("Unable to read file");
+    let data = fs::read_to_string("inputs/day_08.txt").expect("Unable to read file");
 
-    println!("Part 1: {}", part1(parse_input(data.as_str())));
-    println!("Part 2: {}", part2(parse_input(data.as_str())).unwrap());
+    println!("Part 1: {}", part_1(parse_input(data.as_str())));
+    println!("Part 2: {}", part_2(parse_input(data.as_str())).unwrap());
 }
 
 struct Parser {
@@ -129,7 +129,7 @@ Immediately before the program would run an instruction a second time, the value
 
 Run your copy of the boot code. Immediately before any instruction is executed a second time, what value is in the accumulator?
  */
-fn part1(operations: Vec<(String, i32)>) -> i32 {
+fn part_1(operations: Vec<(String, i32)>) -> i32 {
     let (result, _) = Parser::new(operations).run().get_result();
     result
 }
@@ -173,7 +173,7 @@ After the last instruction (acc +6), the program terminates by attempting to run
 
 Fix the program so that it terminates normally by changing exactly one jmp (to nop) or nop (to jmp). What is the value of the accumulator after the program terminates?
  */
-fn part2(operations: Vec<(String, i32)>) -> Result<i32, StringErr> {
+fn part_2(operations: Vec<(String, i32)>) -> Result<i32, StringErr> {
     // generate every iteration of jmp => nop, nop => jump
     for (i, (op, _)) in operations.iter().enumerate() {
         if op != "nop" && op != "jmp" {
@@ -201,7 +201,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_part1_example() {
+    fn test_part_1_example() {
         let input = "nop +0
 acc +1
 jmp +4
@@ -211,11 +211,11 @@ acc -99
 acc +1
 jmp -4
 acc +6";
-        assert_eq!(part1(parse_input(input)), 5)
+        assert_eq!(part_1(parse_input(input)), 5)
     }
 
     #[test]
-    fn test_part2_example() {
+    fn test_part_2_example() {
         let input = "nop +0
 acc +1
 jmp +4
@@ -225,6 +225,6 @@ acc -99
 acc +1
 jmp -4
 acc +6";
-        assert_eq!(part2(parse_input(input)).unwrap(), 8)
+        assert_eq!(part_2(parse_input(input)).unwrap(), 8)
     }
 }

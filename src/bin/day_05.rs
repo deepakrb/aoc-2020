@@ -3,10 +3,10 @@ use std::fs;
 use std::iter::FromIterator;
 
 fn main() {
-    let data = fs::read_to_string("inputs/day5.txt").expect("Unable to read file");
+    let data = fs::read_to_string("inputs/day_05.txt").expect("Unable to read file");
 
-    println!("Part 1: {}", part1(parse_input(&data)));
-    println!("Part 2: {}", part2(parse_input(&data)));
+    println!("Part 1: {}", part_1(parse_input(&data)));
+    println!("Part 2: {}", part_2(parse_input(&data)));
 }
 
 fn parse_input(input: &str) -> Vec<&str> {
@@ -60,7 +60,7 @@ Here are some other boarding passes:
 
 As a sanity check, look through your list of boarding passes. What is the highest seat ID on a boarding pass?
  */
-fn part1(inputs: Vec<&str>) -> i32 {
+fn part_1(inputs: Vec<&str>) -> i32 {
     get_ids(inputs).iter().max().unwrap().clone()
 }
 
@@ -75,7 +75,7 @@ Your seat wasn't at the very front or back, though; the seats with IDs +1 and -1
 
 What is the ID of your seat?
  */
-fn part2(inputs: Vec<&str>) -> i32 {
+fn part_2(inputs: Vec<&str>) -> i32 {
     let found_ids: HashSet<i32> = HashSet::from_iter(get_ids(inputs).iter().cloned());
 
     let all_possible_ids: HashSet<i32> =
@@ -134,6 +134,6 @@ mod tests {
         FFFBBBFRRR
         BBFFBBFRLL";
 
-        assert_eq!(part1(parse_input(input)), 820);
+        assert_eq!(part_1(parse_input(input)), 820);
     }
 }

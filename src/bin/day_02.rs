@@ -2,10 +2,10 @@ use std::collections::HashMap;
 use std::fs;
 
 fn main() {
-    let data = fs::read_to_string("inputs/day2.txt").expect("Unable to read file");
+    let data = fs::read_to_string("inputs/day_02.txt").expect("Unable to read file");
 
-    println!("Part 1: {}", part1(parse_input(&data)));
-    println!("Part 2: {}", part2(parse_input(&data)));
+    println!("Part 1: {}", part_1(parse_input(&data)));
+    println!("Part 2: {}", part_2(parse_input(&data)));
 }
 
 fn parse_input(input: &str) -> Vec<(i32, i32, char, &str)> {
@@ -64,7 +64,7 @@ Given the same example list from above:
 
 How many passwords are valid according to the new interpretation of the policies?
  */
-fn part1(inputs: Vec<(i32, i32, char, &str)>) -> i32 {
+fn part_1(inputs: Vec<(i32, i32, char, &str)>) -> i32 {
     inputs
         .iter()
         .filter(|&(lb, ub, char, pass)| {
@@ -111,7 +111,7 @@ Given the same example list from above:
 
 How many passwords are valid according to the new interpretation of the policies?
  */
-fn part2(inputs: Vec<(i32, i32, char, &str)>) -> i32 {
+fn part_2(inputs: Vec<(i32, i32, char, &str)>) -> i32 {
     inputs
         .iter()
         .filter(|(lb, ub, char, pass)| is_valid_fixed(pass, *char, *lb as usize, *ub as usize))
@@ -152,7 +152,7 @@ mod tests {
 1,3,b,cdefg
 2,9,c,ccccccccc";
 
-        assert_eq!(part1(parse_input(input)), 2);
+        assert_eq!(part_1(parse_input(input)), 2);
     }
 
     #[test]
@@ -161,6 +161,6 @@ mod tests {
 1,3,b,cdefg
 2,9,c,ccccccccc";
 
-        assert_eq!(part2(parse_input(input)), 1);
+        assert_eq!(part_2(parse_input(input)), 1);
     }
 }

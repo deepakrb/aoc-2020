@@ -3,10 +3,10 @@ use std::collections::{HashMap, HashSet};
 use std::fs;
 
 fn main() {
-    let data = fs::read_to_string("inputs/day10.txt").expect("Unable to read file");
+    let data = fs::read_to_string("inputs/day_10.txt").expect("Unable to read file");
 
-    println!("Part 1: {}", part1(parse_input(data.as_str())));
-    println!("Part 2: {}", part2(parse_input(data.as_str())));
+    println!("Part 1: {}", part_1(parse_input(data.as_str())));
+    println!("Part 2: {}", part_2(parse_input(data.as_str())));
 }
 
 fn parse_input(input: &str) -> Vec<i32> {
@@ -107,7 +107,7 @@ In this larger example, in a chain that uses all of the adapters, there are 22 d
 
 Find a chain that uses all of your adapters to connect the charging outlet to your device's built-in adapter and count the joltage differences between the charging outlet, the adapters, and your device. What is the number of 1-jolt differences multiplied by the number of 3-jolt differences?
  */
-fn part1(inputs: Vec<i32>) -> i32 {
+fn part_1(inputs: Vec<i32>) -> i32 {
     let goal = inputs.iter().max().unwrap().clone();
     let hs: HashSet<&i32> = inputs.iter().collect();
     let mut hm: HashMap<i32, i32> = HashMap::new(); // [differences: count]
@@ -196,7 +196,7 @@ You glance back down at your bag and try to remember why you brought so many ada
 
 What is the total number of distinct ways you can arrange the adapters to connect the charging outlet to your device?
  */
-fn part2(inputs: Vec<i32>) -> i64 {
+fn part_2(inputs: Vec<i32>) -> i64 {
     /*
     Here we build a hashmap of the number of times each joltage can be connected to i.e. {joltage : number of times it can be connected to}.
     We do this in ascending order to build a cumulative value.
@@ -233,7 +233,7 @@ mod tests {
 6
 12
 4";
-        assert_eq!(part1(parse_input(input)), 35)
+        assert_eq!(part_1(parse_input(input)), 35)
     }
 
     #[test]
@@ -270,7 +270,7 @@ mod tests {
 10
 3
 ";
-        assert_eq!(part1(parse_input(input)), 220)
+        assert_eq!(part_1(parse_input(input)), 220)
     }
 
     #[test]
@@ -286,7 +286,7 @@ mod tests {
 6
 12
 4";
-        assert_eq!(part2(parse_input(input)), 8)
+        assert_eq!(part_2(parse_input(input)), 8)
     }
 
     #[test]
@@ -323,6 +323,6 @@ mod tests {
 10
 3
 ";
-        assert_eq!(part2(parse_input(input)), 19208)
+        assert_eq!(part_2(parse_input(input)), 19208)
     }
 }

@@ -4,10 +4,10 @@ use std::fs;
 use std::iter::FromIterator;
 
 fn main() {
-    let data = fs::read_to_string("inputs/day7.txt").expect("Unable to read file");
+    let data = fs::read_to_string("inputs/day_07.txt").expect("Unable to read file");
 
-    println!("Part 1: {}", part1(parse_input(data.clone())));
-    println!("Part 2: {}", part2(parse_input(data.clone())));
+    println!("Part 1: {}", part_1(parse_input(data.clone())));
+    println!("Part 2: {}", part_2(parse_input(data.clone())));
 }
 
 fn parse_input(input: String) -> Vec<(String, Vec<(String, i32)>)> {
@@ -71,7 +71,7 @@ So, in this example, the number of bag colors that can eventually contain at lea
 
 How many bag colors can eventually contain at least one shiny gold bag? (The list of rules is quite long; make sure you get all of it.)
  */
-fn part1(input: Vec<(String, Vec<(String, i32)>)>) -> i32 {
+fn part_1(input: Vec<(String, Vec<(String, i32)>)>) -> i32 {
     // build a reverse index { bag_x: Set(every bag that can contain bag_x) }
     let mapping: HashMap<String, HashSet<String>> =
         input
@@ -142,7 +142,7 @@ In this example, a single shiny gold bag must contain 126 other bags.
 
 How many individual bags are required inside your single shiny gold bag?
  */
-fn part2(input: Vec<(String, Vec<(String, i32)>)>) -> i32 {
+fn part_2(input: Vec<(String, Vec<(String, i32)>)>) -> i32 {
     let mapping: HashMap<String, Vec<(String, i32)>> =
         input.iter().fold(HashMap::new(), |mut acc, x| {
             acc.insert(x.0.clone(), x.1.clone());
@@ -181,7 +181,7 @@ vibrant plum bags contain 5 faded blue bags, 6 dotted black bags.
 faded blue bags contain no other bags.
 dotted black bags contain no other bags.";
 
-        assert_eq!(part1(parse_input(input.parse().unwrap())), 4);
+        assert_eq!(part_1(parse_input(input.parse().unwrap())), 4);
     }
 
     #[test]
@@ -194,6 +194,6 @@ dark green bags contain 2 dark blue bags.
 dark blue bags contain 2 dark violet bags.
 dark violet bags contain no other bags.";
 
-        assert_eq!(part2(parse_input(input.parse().unwrap())), 126);
+        assert_eq!(part_2(parse_input(input.parse().unwrap())), 126);
     }
 }

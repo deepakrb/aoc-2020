@@ -5,10 +5,13 @@ use std::fs;
 struct StringErr(String);
 
 fn main() {
-    let data = fs::read_to_string("inputs/day9.txt").expect("Unable to read file");
+    let data = fs::read_to_string("inputs/day_09.txt").expect("Unable to read file");
 
-    println!("Part 1: {}", part1(parse_input(data.as_str()), 25));
-    println!("Part 2: {}", part2(parse_input(data.as_str()), 25).unwrap());
+    println!("Part 1: {}", part_1(parse_input(data.as_str()), 25));
+    println!(
+        "Part 2: {}",
+        part_2(parse_input(data.as_str()), 25).unwrap()
+    );
 }
 
 fn parse_input(input: &str) -> Vec<i64> {
@@ -105,7 +108,7 @@ In this example, after the 5-number preamble, almost every number is the sum of 
 
 The first step of attacking the weakness in the XMAS data is to find the first number in the list (after the preamble) which is not the sum of two of the 25 numbers before it. What is the first number that does not have this property?
  */
-fn part1(inputs: Vec<i64>, preamble_length: usize) -> i64 {
+fn part_1(inputs: Vec<i64>, preamble_length: usize) -> i64 {
     get_first_invalid_number(&inputs, preamble_length).unwrap()
 }
 
@@ -143,7 +146,7 @@ To find the encryption weakness, add together the smallest and largest number in
 
 What is the encryption weakness in your XMAS-encrypted list of numbers?
  */
-fn part2(inputs: Vec<i64>, preamble_length: usize) -> Result<i64, StringErr> {
+fn part_2(inputs: Vec<i64>, preamble_length: usize) -> Result<i64, StringErr> {
     let invalid_number = get_first_invalid_number(&inputs, preamble_length).unwrap();
 
     // uses a head (idx_head) and tail (idx_tail) pointer to iterate through
@@ -201,7 +204,7 @@ mod tests {
 277
 309
 576";
-        assert_eq!(part1(parse_input(input), 5), 127)
+        assert_eq!(part_1(parse_input(input), 5), 127)
     }
 
     #[test]
@@ -226,6 +229,6 @@ mod tests {
 277
 309
 576";
-        assert_eq!(part2(parse_input(input), 5).unwrap(), 62)
+        assert_eq!(part_2(parse_input(input), 5).unwrap(), 62)
     }
 }

@@ -16,10 +16,10 @@ lazy_static! {
 }
 
 fn main() {
-    let data = fs::read_to_string("inputs/day4.txt").expect("Unable to read file");
+    let data = fs::read_to_string("inputs/day_04.txt").expect("Unable to read file");
 
-    println!("Part 1: {}", part1(parse_input(&data)));
-    println!("Part 2: {}", part2(parse_input(&data)));
+    println!("Part 1: {}", part_1(parse_input(&data)));
+    println!("Part 2: {}", part_2(parse_input(&data)));
 }
 
 fn parse_input(data: &str) -> Vec<&str> {
@@ -91,7 +91,7 @@ According to the above rules, your improved system would report 2 valid passport
 
 Count the number of valid passports - those that have all required fields. Treat cid as optional. In your batch file, how many passports are valid?
  */
-fn part1(inputs: Vec<&str>) -> i32 {
+fn part_1(inputs: Vec<&str>) -> i32 {
     inputs
         .iter()
         .filter(|input| has_valid_keys(input))
@@ -186,7 +186,7 @@ iyr:2010 hgt:158cm hcl:#b6652a ecl:blu byr:1944 eyr:2021 pid:093154719
 
 Count the number of valid passports - those that have all required fields and valid values. Continue to treat cid as optional. In your batch file, how many passports are valid?
  */
-fn part2(inputs: Vec<&str>) -> i32 {
+fn part_2(inputs: Vec<&str>) -> i32 {
     inputs
         .iter()
         .filter(|input| passport_has_valid_contents(input))
@@ -293,7 +293,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_part1_example() {
+    fn test_part_1_example() {
         let data = String::from(
             "ecl:gry pid:860033327 eyr:2020 hcl:#fffffd
 byr:1937 iyr:2017 cid:147 hgt:183cm
@@ -310,11 +310,11 @@ hcl:#cfa07d eyr:2025 pid:166559648
 iyr:2011 ecl:brn hgt:59in",
         );
 
-        assert_eq!(part1(parse_input(&data)), 2)
+        assert_eq!(part_1(parse_input(&data)), 2)
     }
 
     #[test]
-    fn test_part2_example() {
+    fn test_part_2_example() {
         let data = String::from(
             "eyr:1972 cid:100
 hcl:#18171d ecl:amb hgt:170 pid:186cm iyr:2018 byr:1926
@@ -344,6 +344,6 @@ eyr:2022
 iyr:2010 hgt:158cm hcl:#b6652a ecl:blu byr:1944 eyr:2021 pid:093154719",
         );
 
-        assert_eq!(part2(parse_input(&data)), 4)
+        assert_eq!(part_2(parse_input(&data)), 4)
     }
 }

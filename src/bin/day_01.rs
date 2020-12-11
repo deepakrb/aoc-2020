@@ -3,10 +3,10 @@ use std::fs;
 use std::iter::FromIterator;
 
 fn main() {
-    let data = fs::read_to_string("inputs/day1.txt").expect("Unable to read file");
+    let data = fs::read_to_string("inputs/day_01.txt").expect("Unable to read file");
 
-    println!("Part 1: {}", part1(parse_input(&data)));
-    println!("Part 2 {}", part2(parse_input(&data)).unwrap());
+    println!("Part 1: {}", part_1(parse_input(&data)));
+    println!("Part 2 {}", part_2(parse_input(&data)).unwrap());
 }
 
 fn parse_input(input: &str) -> Vec<i32> {
@@ -59,7 +59,7 @@ In this list, the two entries that sum to 2020 are 1721 and 299. Multiplying the
 
 Of course, your expense report is much larger. Find the two entries that sum to 2020; what do you get if you multiply them together?
  */
-fn part1(input: Vec<i32>) -> i32 {
+fn part_1(input: Vec<i32>) -> i32 {
     let (x, y) = does_match(2020, &HashSet::from_iter(input.iter())).unwrap();
     x * y
 }
@@ -73,7 +73,7 @@ Using the above example again, the three entries that sum to 2020 are 979, 366, 
 
 In your expense report, what is the product of the three entries that sum to 2020?
  */
-fn part2(input: Vec<i32>) -> Result<i32, &'static str> {
+fn part_2(input: Vec<i32>) -> Result<i32, &'static str> {
     let all_inputs: HashSet<&i32> = HashSet::from_iter(input.iter());
 
     for item in input.iter() {
@@ -102,7 +102,7 @@ mod tests {
 675
 1456";
 
-        assert_eq!(part1(parse_input(input)), 514579);
+        assert_eq!(part_1(parse_input(input)), 514579);
     }
 
     #[test]
@@ -114,6 +114,6 @@ mod tests {
 675
 1456";
 
-        assert_eq!(part2(parse_input(input)).unwrap(), 241861950);
+        assert_eq!(part_2(parse_input(input)).unwrap(), 241861950);
     }
 }
