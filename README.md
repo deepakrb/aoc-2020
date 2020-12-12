@@ -39,8 +39,9 @@
 |[Day 7 - Handy Haversacks](src/bin/day_07.rs)       |[📄](https://adventofcode.com/2020/day/7)      |
 |[Day 8 - Handheld Halting](src/bin/day_08.rs)       |[📄](https://adventofcode.com/2020/day/8)      |
 |[Day 9 - Encoding Error](src/bin/day_09.rs)         |[📄](https://adventofcode.com/2020/day/9)      |
-|[Day 10 - Adapter Array](src/bin/day_10.rs)        |[📄](https://adventofcode.com/2020/day/10)     |
-|[Day 11 - Seating System](src/bin/day_11.rs)       |[📄](https://adventofcode.com/2020/day/11)     |
+|[Day 10 - Adapter Array](src/bin/day_10.rs)         |[📄](https://adventofcode.com/2020/day/10)     |
+|[Day 11 - Seating System](src/bin/day_11.rs)        |[📄](https://adventofcode.com/2020/day/11)     |
+|[Day 12 - Rain Risk](src/bin/day_12.rs)             |[📄](https://adventofcode.com/2020/day/12)     |
 
 ## Links
 - [Advent of code](https://adventofcode.com/)
