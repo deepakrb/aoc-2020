@@ -28,8 +28,8 @@
 ```
 
 ## Status
-|Day                                               |Challenge                                     |
-|--------------------------------------------------|----------------------------------------------|
+|Code                                                |Challenge                                     |
+|----------------------------------------------------|----------------------------------------------|
 |[Day 1 - Report Repair](src/bin/day_01.rs)          |[📄](https://adventofcode.com/2020/day/1)      |
 |[Day 2 - Password Philosophy](src/bin/day_02.rs)    |[📄](https://adventofcode.com/2020/day/2)      |
 |[Day 3 - Toboggan Trajectory](src/bin/day_03.rs)    |[📄](https://adventofcode.com/2020/day/3)      |
@@ -42,6 +42,7 @@
 |[Day 10 - Adapter Array](src/bin/day_10.rs)         |[📄](https://adventofcode.com/2020/day/10)     |
 |[Day 11 - Seating System](src/bin/day_11.rs)        |[📄](https://adventofcode.com/2020/day/11)     |
 |[Day 12 - Rain Risk](src/bin/day_12.rs)             |[📄](https://adventofcode.com/2020/day/12)     |
+|[Day 13 - Shuttle Search](src/bin/day_13.rs)        |[📄](https://adventofcode.com/2020/day/13)     |
 
 ## Links
 - [Advent of code](https://adventofcode.com/)
