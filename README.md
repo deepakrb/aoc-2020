@@ -43,6 +43,7 @@
 |[Day 11 - Seating System](src/bin/day_11.rs)        |[📄](https://adventofcode.com/2020/day/11)     |
 |[Day 12 - Rain Risk](src/bin/day_12.rs)             |[📄](https://adventofcode.com/2020/day/12)     |
 |[Day 13 - Shuttle Search](src/bin/day_13.rs)        |[📄](https://adventofcode.com/2020/day/13)     |
+|[Day 14 - Docking Data](src/bin/day_14.rs)          |[📄](https://adventofcode.com/2020/day/14)     |
 
 ## Links
 - [Advent of code](https://adventofcode.com/)
