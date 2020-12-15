@@ -83,15 +83,14 @@ fn part_2(inputs: Vec<i32>) -> i32 {
 }
 
 fn get_number(inputs: Vec<i32>, goal: usize) -> i32 {
-    let mut last_number = 0;
-    let mut hm: HashMap<i32, Vec<usize>> = inputs
-        .iter()
-        .enumerate()
-        .map(|(i, &v)| {
-            last_number = v;
-            (v, vec![i])
-        })
-        .collect();
+    let (last_number, mut hm) =
+        inputs
+            .iter()
+            .enumerate()
+            .fold((0, HashMap::new()), |(_, mut map), (i, &v)| {
+                map.insert(v, vec![i]);
+                (v, map)
+            });
 
     (inputs.len()..goal).fold(last_number, |mut ln, i| {
         let def: Vec<usize> = vec![];
