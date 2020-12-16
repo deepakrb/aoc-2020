@@ -45,6 +45,7 @@
 |[Day 13 - Shuttle Search](src/bin/day_13.rs)         |[📄](https://adventofcode.com/2020/day/13)     |
 |[Day 14 - Docking Data](src/bin/day_14.rs)           |[📄](https://adventofcode.com/2020/day/14)     |
 |[Day 15 - Rambunctious Recitation](src/bin/day_15.rs)|[📄](https://adventofcode.com/2020/day/15)     |
+|[Day 16 - Ticket Translation](src/bin/day_16.rs)     |[📄](https://adventofcode.com/2020/day/16)     |
 
 ## Links
 - [Advent of code](https://adventofcode.com/)
