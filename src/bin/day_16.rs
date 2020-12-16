@@ -153,7 +153,7 @@ Based on the nearby tickets in the above example, the first position must be row
 
 Once you work out which field is which, look for the six fields on your ticket that start with the word departure. What do you get if you multiply those six values together?
  */
-fn part_2(inp: Input, prefix: &str) -> i64 {
+fn part_2(inp: Input, prefix: &str) -> u64 {
     // We reduce the inputs into a hashmap of possible values per field index i.e.
     // { 1: ["arrival location", "departure time"], 2: ["departure time"]. each position contains
     // multiple possible fields.
@@ -175,7 +175,16 @@ fn part_2(inp: Input, prefix: &str) -> i64 {
             },
         );
 
-    product_of_field_prefix(prefix, inp.m_ticket, get_field_at_index(&possible_values))
+    // reduce the possibilities into the fields we know are at each index
+    // then get the ticket values for the departure fields
+    get_field_at_index(&possible_values)
+        .into_iter()
+        .fold(1u64, |mut acc, (i, val)| {
+            if val.starts_with(prefix) {
+                acc *= (*inp.m_ticket.get(i).unwrap() as u64)
+            }
+            acc
+        })
 }
 
 fn get_possible_fields(
@@ -233,17 +242,6 @@ fn get_field_at_index(poss_fields: &HashMap<usize, HashSet<String>>) -> HashMap<
             return hm;
         }
     }
-}
-
-// product_of_field_prefix multiplies the fields value for keys with a prefix
-fn product_of_field_prefix(prefix: &str, ticket: Vec<i32>, fields: HashMap<usize, String>) -> i64 {
-    let mut acc: i64 = 1;
-    for (key, value) in fields {
-        if value.starts_with(prefix) {
-            acc = acc * (*ticket.get(key).unwrap() as i64)
-        }
-    }
-    acc
 }
 
 mod tests {
